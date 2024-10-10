@@ -6,7 +6,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 $int = 1;
 
-var_dump($int);
+// var_dump($int);
 
 // output : int(1)
 
@@ -16,7 +16,7 @@ var_dump($int);
 
 $float = 1.5;
 
-var_dump($float);
+// var_dump($float);
 
 // output : float(1.5)
 
@@ -26,7 +26,7 @@ var_dump($float);
 
 $string = "1.5";
 
-var_dump($string);
+// var_dump($string);
 
 // output : string(3) "1.5"
 
@@ -42,7 +42,7 @@ $suite = [
     [1, 3, 9, 27, 81]
 ];
 
-var_dump($suite);
+// var_dump($suite);
 
 // output :
 //
@@ -84,9 +84,9 @@ $utilisateurs = [
     'Florian'
 ];
 
-var_dump($utilisateurs);
+// var_dump($utilisateurs);
 
-// output : 
+// output :
 //
 // array(4) {
 //     [0]=>
@@ -121,9 +121,8 @@ $produits = [
     'Stickers' => ['poids' => 10, 'quantite' => 100, 'prix' => 1.5]
 ];
 
-var_dump($produits);
 
-// output : 
+// output :
 //
 // array(2) {
 //     ["Livre"]=>
@@ -146,4 +145,34 @@ var_dump($produits);
 //     }
 //   }
 
-?>
+echo my_var_dump($produits);
+echo my_var_dump("Hello world !");
+echo my_var_dump(1);
+echo my_var_dump(1.42);
+
+function my_var_dump($data, $indent = 0)
+{
+    switch (gettype($data)) {
+        case 'string':
+            return "" . str_repeat(" ", $indent * 2) . "string(" . strlen($data) . ") \"" . $data . "\"\n";
+            break;
+        case 'integer':
+            return "" . str_repeat(" ", $indent * 2) . "int(" . strval($data) . ")\n";
+            break;
+        case 'double':
+            return "" . str_repeat(" ", $indent * 2) . "float(" . strval($data) . ")\n";
+            break;
+        case 'array':
+            $array_computed = "" . str_repeat(" ", $indent * 2) . "array(" . count($data) . ") {\n";
+            foreach ($data as $key => $dt) {
+                $key_formated = (gettype($key) == 'string') ? "\"" . $key . "\"" : $key;
+                $array_computed .= str_repeat(" ", ($indent + 1) * 2) . "[" . $key_formated . "]=>\n";
+                $array_computed .= my_var_dump($dt, $indent + 1);
+            }
+            return $array_computed . str_repeat(" ", $indent * 2) . "}\n";
+            break;
+        default:
+            return "unset\n";
+            break;
+    }
+}
